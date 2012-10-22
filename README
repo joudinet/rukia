@@ -2,7 +2,7 @@
 
   A library to generate uniformly at random paths in automata.
 
-  Copyright (C) 2008, 2009, 2011 Johan Oudinet
+  Copyright (C) 2008, 2009, 2011, 2012 Johan Oudinet
 
 *** Notes on how to install. ***
   This package needs:
@@ -16,8 +16,10 @@
   path, you may need to tell to configure how to find it. For example,
   assume BGL headers are in $HOME/include and BGL libraries are in
   $HOME/lib, the following command tell to configure where they are :
-  ./configure --with-boost=$HOME
+  $ ./configure --with-boost=$HOME
 
+	Note to GIT users: the configure script can be generated via:
+	$ ./bootstrap.sh
 
 ** Tips on manual installation of Boost library **
 - under a Unix-like system:
