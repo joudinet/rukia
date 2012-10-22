@@ -1,0 +1,273 @@
+2012-10-19  Johan Oudinet  <oudinet@cs.tum.edu>
+
+	Fix a compilation error and print the number of paths in
+	draw_with_ctable example.
+
+	* src/draw_with_ctable.cc: Print the number of paths to stderr.
+
+	* include/rukia/draw.hh: Remove useless mutable tags.
+
+2011-08-02  Johan Oudinet  <oudinet@lri.fr>
+
+	Distribute examples used in README.
+
+	* data/example.{dot,fs}: New.
+
+	* Makefile.am: Include samples from data directory to the package.
+
+	* README: Update the example to use the examples inside data.
+
+2011-07-29  Johan Oudinet  <oudinet@lri.fr>
+
+	Upgrade to BGL 1.47
+
+	* README: New tips that simplify interaction with BOOST
+	* configure.ac: Require BGL 1.47 and use M4 macros from
+	Tsuna. Update to version 0.42.
+	* m4/boost.m4: New.
+	* src/Makefile.am (LDADD): Adapt w.r.t Tsuna's README.
+
+2011-07-29  Johan Oudinet  <oudinet@lri.fr>
+
+	The new GraphViz loader works now with CSR graph interface from
+	BGL 1.42.
+
+	* include/rukia/io/dot/load.hh (rukia): Adapt the GraphViz loader
+	for the new CSR interface.
+
+2010-10-04  Johan Oudinet  <oudinet@lri.fr>
+
+	Add a method to draw u.a.r lassos (elementary paths followed by
+	elementary cycles) in reducible flow graphs.
+
+	* src/draw_lassos.cc: New.
+
+2010-07-27  Johan Oudinet  <oudinet@lri.fr>
+
+	Fix a bug that occurs when using a recent version of configure.
+
+	* configure.ac: Commands were underquoted.
+
+2010-07-27  Johan Oudinet  <oudinet@lri.fr>
+
+	Two new methods (dichopile and divide and conquer) are available
+	to draw efficiently paths while using few memory.
+
+	* include/rukia/draw.{hh,hxx}: Add dichopile and dac methods.
+
+	* include/rukia/dtable.hh, src/bench_dichopile.cc: New.
+
+	* src/bench_divide_and_conquer.cc: New.
+
+	* src/Makefile.am: Add bench_{dac,dichopile} programs.
+
+2010-07-27  Johan Oudinet  <oudinet@lri.fr>
+
+	Add support for final states to count_paths function (renamed from
+	count function).
+
+	* include/rukia/count.hh: Add dichopile and dac methods.
+
+	* include/rukia/io/dot/load.hh: Start a new home-made CSR loader
+	to deal with the new CSR graph architecture.
+
+2010-04-16  Johan Oudinet  <oudinet@lri.fr>
+
+	Minor fixes.
+
+	* src/Makefile.am: Add bench_ctable_float program.
+
+	* include/rukia/random.hh: Add uniform random traits.
+
+	* include/rukia/ctable.hh: Use const IndexMap.
+
+	* include/rukia/io/dot/load.hh: Improve robustness of the
+	home-made CSR loader (whitespace free).
+
+	* include/rukia/automaton.hh,
+	src/bench_path_cover{,boltz,dbl,rw}.cc: Define the missing
+	hash_value function of an edge_descriptor in the header instead of
+	redundant definitions.
+
+	* include/rukia/draw.hxx: Add a line return in the warning message
+	that occurs when isotropic random walk gets blocked.
+
+2009-08-07  Johan Oudinet  <oudinet@lri.fr>
+
+	Update every benchmarks to use hash tables.
+
+	* src/bench_path_cover.cc, src/bench_path_cover_boltz.cc,
+	src/bench_path_cover_rw.cc: Use hash tables to keep previous
+	paths.
+
+2009-08-04  Johan Oudinet  <oudinet@lri.fr>
+
+	CSR graph is now the default format. It needs less memory but the
+	Graphviz loader is less robust (it is an home made parser).
+
+	* include/rukia/io/dot/load.hh: Be able to load a graph whatever
+	is name.
+
+	* include/rukia/automaton.hh: Rename automaton to old_automaton
+	and csr_automaton to automaton.
+
+	* include/rukia/draw.hxx, include/rukia/ctable.hh: Use IndexMap
+	instead of assuming the existence of an internal property.
+
+	* configure.ac: Change version number to 0.4
+
+2009-08-03  Johan Oudinet  <oudinet@lri.fr>
+
+	Add a new kind of automata based on a compressed sparse row
+	graphs.
+
+	* include/rukia/automaton.hh: new csr_automaton type.
+
+	* include/rukia/io/dot/load.hh: home made loader for Graphviz
+	graph to csr_automaton.
+
+	* include/rukia/count.hh: Rename pre_values into post_values.
+
+2009-07-08  Johan Oudinet  <oudinet@lri.fr>
+
+	Use LGPL.
+
+	* COPYING, COPYING.LESSER: New.
+
+	* configure.ac, *.am, *.hh, *.hxx, *.cc: Replace header from GPL
+	to LGPL.
+
+2009-07-01  Johan Oudinet  <oudinet@lri.fr>
+
+	* src/Makefile.am (draw_exact_ctable_CXXFLAGS): Add optimization
+	flag -O3
+
+	* configure.ac: Update to version 0.3
+
+	* README: Complete documentation about how to install Boost.
+
+2009-05-27  Johan Oudinet  <oudinet@lri.fr>
+
+	Port to MinGW.
+
+	* include/rukia/get_mem_usage.hh: include unistd.h
+
+	* configure.ac: link also with libgmp
+
+2009-05-27  Johan Oudinet  <oudinet@lri.fr>
+
+	* src/bench_path_cover_dbl.cc: Use hash value of paths to limit
+	the memory grow and speed up looking for a path.
+
+	* include/rukia/random.hh: Add a wrapper for mpf_class
+
+	* include/rukia/count.hh: add a missing header.
+
+2009-04-22  Johan Oudinet  <oudinet@lri.fr>
+
+	* include/rukia/get_mem_usage.hh (proc_mem_usage): New. Get exact
+	memory allocated to a processus.
+
+	* include/rukia/draw.hxx (boltz): Forgot to restart from the
+	initial state.
+
+2009-04-21  Johan Oudinet  <oudinet@lri.fr>
+
+	Benchmark Boltzmann generator.
+
+	* include/rukia/draw.hh, include/rukia/draw.hxx: Add Boltzmann
+	generator.
+
+	* src/bench_path_cover_boltz.cc,
+	src/Makefile.am (bench_boltz_CXXFLAGS): New.
+
+2009-04-20  Johan Oudinet  <oudinet@lri.fr>
+
+	Measure memory usage more precisely.
+
+	* include/rukia/get_mem_usage.hh (get_mem_usage): Take into
+	account buffers, caches and swaps when measuring memory usage.
+
+2009-03-19  Johan Oudinet  <oudinet@lri.fr>
+
+	Bench ctable with double values.
+
+	* include/rukia/random.hh: Add a random wrapper for Real numbers.
+
+	* src/Makefile.am (bench_dbl): New and rename bench_path_cover to
+	bench_mpz.
+
+	* src/bench_path_cover_dbl.cc: New.
+2009-03-16  Johan Oudinet  <oudinet@lri.fr>
+
+	Bench for classical random walks.
+
+	* src/bench_path_cover_rw.cc: New.
+
+	* include/rukia/random.hh: random generator for Integer numbers.
+
+	* include/rukia/draw.hh, include/rukia/draw.hxx: random walks.
+
+	Benchmark is now ready for ctable with mpz values.
+
+	* src/bench_path_cover.cc (main): Verify different percentage in a
+	single execution.
+
+	* src/Makefile.am: Use flag -O3 when benchmarking.
+
+2009-03-12  Johan Oudinet  <oudinet@lri.fr>
+
+	Bench also the memory usage.
+
+	* include/rukia/get_mem_usage.hh: New.
+
+	* src/bench_path_cover.cc (main): Print memory usage.
+
+2009-03-12  Johan Oudinet  <oudinet@lri.fr>
+
+	* src/bench_path_cover.cc (main): Normalize the input/output
+	according to benchmark needs.
+
+2009-03-11  Johan Oudinet  <oudinet@lri.fr>
+
+	Prepare benchmark of several drawing methods.
+
+	* src/bench_path_cover.cc: Now it works for the exact_uniform_draw
+	method: count the number of paths, and measure drawn paths and
+	elapsed time.
+
+2009-03-11  Johan Oudinet  <oudinet@lri.fr>
+
+	Consider path as a list of edge, and now trace is the label list.
+
+	* include/rukia/path.hh, include/rukia/path.hxx: modify path_type
+	definition and add a trace_type type. Add also a trace function to
+	get a path's trace.
+
+2009-03-09  Johan Oudinet  <oudinet@lri.fr>
+
+	* src/draw_with_ctable.cc (main): Use smart pointer instead of
+	manually deleting a classical pointer.
+
+2009-03-06  Johan Oudinet  <oudinet@lri.fr>
+
+	* src/draw_with_ctable.cc (main): Fix a memory leak found with valgrind.
+
+	* configure.ac: Add debugging and optimizing flags
+
+2009-03-05  Johan Oudinet  <oudinet@lri.fr>
+
+	* include/rukia/ctable.hh: Add support for final states.
+
+	* src/draw_with_ctable.cc (main): Can define the final states.
+
+	* configure.ac: Check boost_graph library.
+
+2009-03-04  Johan Oudinet  <oudinet@lri.fr>
+
+	Autotoolizing the project.
+
+	* configure.ac, Makefile.am, ChangeLog, AUTHORS,
+	m4/rukia-boost.m4, m4/rukia.m4,
+	include/Makefile.am, src/Makefile.am: New.
+
