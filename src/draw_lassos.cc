@@ -1,4 +1,4 @@
-// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2010
+// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2010, 2013
 //  
 // This file is part of Rukia.
 //  
@@ -127,12 +127,12 @@ record_backedges(CounterMap pa, EdgeSet& pb, Tag) {
 // is_not_in_subset Predicate (the one from Boost doesn't compile)
 template <class Set>
 struct is_not_in_subset {
-  is_not_in_subset() { }
+  is_not_in_subset(): m_set(0) { }
   is_not_in_subset(const Set& s) : m_set(&s) { }
   template <typename Edge>
   bool operator()(const Edge& e) const {
     // Return true if e is not in m_set
-    return m_set->find (e) == m_set->end ();
+    return m_set == 0 || m_set->find (e) == m_set->end ();
   }
   const Set* m_set;
 };
