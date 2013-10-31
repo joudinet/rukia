@@ -1,4 +1,4 @@
-// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2010
+// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2010, 2013
 //  
 // This file is part of Rukia.
 //  
@@ -207,6 +207,10 @@ namespace rukia {
     : aut_(aut), ralgo_(ralgo)
   {
     stack_.push (std::make_pair (0, L0));
+    nb_calculation_ = 0;
+    max_stack_size_ = 0;
+    nb_calculation_ = 0;
+    mem_size_ = 0;
   }
 
   // TODO: vertex_descriptor s should be an argument.
