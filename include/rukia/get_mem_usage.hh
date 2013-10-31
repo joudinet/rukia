@@ -1,4 +1,4 @@
-// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2009
+// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2009, 2013
 //  
 // This file is part of Rukia.
 //  
@@ -66,10 +66,10 @@ unsigned long get_mem_usage ()
 unsigned long proc_mem_usage (int pid = getpid())
 {
   unsigned long mem = 0;
-  const char* filename = ("/proc/" +
+  std::string filename = "/proc/" +
 			  boost::lexical_cast<std::string>(pid) +
-			  "/status").c_str ();
-  std::ifstream ifs (filename);
+			  "/status";
+  std::ifstream ifs (filename.c_str ());
 
   while (ifs.good ())
     {
