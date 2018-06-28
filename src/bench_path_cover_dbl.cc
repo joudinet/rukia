@@ -1,20 +1,20 @@
-// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2010
-//  
+// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2010, 2018
+//
 // This file is part of Rukia.
-//  
+//
 // Rukia is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-//  
+//
 // Rukia is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-//  
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with Rukia.  If not, see <http://www.gnu.org/licenses/>.
-//  
+//
 #ifndef BENCH_PATH_COVER_CC
 # define BENCH_PATH_COVER_CC
 # include <iostream>
@@ -45,7 +45,6 @@ int main (int argc, char *argv[])
   typedef u_r_random<>	ralgo_type;
   typedef counting_table<automaton,double>	ctable_type;
   typedef draw_paths<automaton,ctable_type,ralgo_type>	exact_draw_paths;
-  typedef std::auto_ptr<ctable_type>		pctable_type;
   typedef boost::unordered_set<std::size_t, boost::hash<std::size_t> > paths_type;
 
   if (argc != 5)
@@ -63,7 +62,7 @@ int main (int argc, char *argv[])
 
   mpf_class per (boost::lexical_cast<double> (argv[3])); // expected percentage
   mpf_class nb_exp_paths (per * nb_paths);
-      
+
   std::ofstream out (argv[4]);
   out << "NbExpPaths: " << nb_exp_paths << std::endl;
 
@@ -79,7 +78,7 @@ int main (int argc, char *argv[])
   ralgo.seed ();
   exact_draw_paths draw (aut, ctable, ralgo);
   paths_type paths;
- 
+
   timer.restart ();
   // Draw nb_exp_paths different paths.
   mpz_class n_path_drawn = 0;

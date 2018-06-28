@@ -1,23 +1,24 @@
-// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2009, 2012
-//  
+// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2009, 2012, 2018
+//
 // This file is part of Rukia.
-//  
+//
 // Rukia is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-//  
+//
 // Rukia is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-//  
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with Rukia.  If not, see <http://www.gnu.org/licenses/>.
-//  
+//
 #ifndef RUKIA_DRAW_WITH_CTABLE_CC
 # define RUKIA_DRAW_WITH_CTABLE_CC
 # include <iostream>
+# include <memory>
 
 # include <boost/algorithm/string/join.hpp>
 
@@ -37,7 +38,7 @@ int main (int argc, char *argv[])
   typedef u_mpz_random	ralgo_type;
   typedef counting_table<automaton,mpz_class>	ctable_type;
   typedef draw_paths<automaton,ctable_type,ralgo_type>	exact_draw_paths;
-  typedef std::auto_ptr<ctable_type>		pctable_type;
+  typedef std::unique_ptr<ctable_type>		pctable_type;
   if (argc < 4 || argc > 5)
     {
       std::cerr << "Usage: " << argv[0] << " graph.dot m n [final_states]" << std::endl;
@@ -51,12 +52,12 @@ int main (int argc, char *argv[])
   // Compute ctable, the number of paths of length n that start from
   // each state
   unsigned n = atoi (argv[3]);
-  
+
   pctable_type pctable;
   if (argc == 4)
-    pctable = pctable_type (new ctable_type (aut, n));
+    pctable = std::make_unique<ctable_type>(aut, n);
   else
-    pctable = pctable_type (new ctable_type (aut, n, argv[4]));
+    pctable = std::make_unique<ctable_type>(aut, n, argv[4]);
 	std::cerr << "Number of paths of length " << n << ": "
 						<< (*pctable)(vertex (0, aut), n) << std::endl;
   // Draw m paths and print it

@@ -37,6 +37,11 @@ AC_CXX_FLAGS
 # Use libtool
 AC_PROG_LIBTOOL
 
+# Check for C++14 support
+AC_LANG_PUSH([C++])
+AX_CXX_COMPILE_STDCXX_14
+AC_LANG_POP
+
 # Checks for libraries.
 # test for GMP and c++ wrappers
 AC_CHECK_LIB([gmp], [__gmpz_init], , [AC_MSG_ERROR([This package needs libgmp library])])
