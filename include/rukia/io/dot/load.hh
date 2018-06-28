@@ -1,20 +1,20 @@
-// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2008, 2009, 2010, 2011
-//  
+// Copyright (C) Univ. Paris-SUD, Johan Oudinet <oudinet@lri.fr> - 2008, 2018
+//
 // This file is part of Rukia.
-//  
+//
 // Rukia is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
-//  
+//
 // Rukia is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-//  
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with Rukia.  If not, see <http://www.gnu.org/licenses/>.
-//  
+//
 #ifndef RUKIA_IO_DOT_LOAD_HH
 # define RUKIA_IO_DOT_LOAD_HH
 # include <string>
@@ -36,13 +36,29 @@ namespace rukia
 
       namespace detail
       {
+	// Ensure the first line is a digraph.
+	void assert_digraph(std::ifstream& ifs)
+	{
+	  std::string str;
+	  getline (ifs, str);
+	  // Get rid of last character if it is a \r.
+	  if (not str.empty() and *str.crbegin() == '\r')
+	    str.pop_back();
+	  std::vector<std::string> strs;
+	  boost::split(strs, str, boost::is_any_of("\t "));
+
+	  assert (strs.size () == 3);
+	  assert (strs[0] == "digraph");
+	  assert (strs[2] == "{");
+	}
+
 	template <typename T, typename V = std::pair<T, T> >
 	struct edge_parser
 	{
 	  typedef V	result_type;
 
 	  edge_parser() {}
-	  
+
 	  static bool read(std::istream& file, V& value)
 	  {
 	    if (file.good () && file.peek () != '}')
@@ -50,7 +66,7 @@ namespace rukia
 		T src, dst;
 		char c;
 		std::string str;
-		do { 
+		do {
 		  file >> src;
 		  do { c = file.get (); } while (isspace (c));
 		} while (c == ';');
@@ -58,6 +74,9 @@ namespace rukia
 		c = file.get (); assert (c == '>');
 		file >> dst;
 		getline (file, str);
+		// Get rid of last character if it is a \r.
+		if (not str.empty() and *str.crbegin() == '\r')
+		  str.pop_back();
 		value = std::make_pair (src, dst);
 		return true;
 	      }
@@ -78,6 +97,9 @@ namespace rukia
 	      {
 		std::string str;
 		getline (file, str);
+		// Get rid of last character if it is a \r.
+		if (not str.empty() and *str.crbegin() == '\r')
+		  str.pop_back();
 		std::vector<std::string> strs;
 		boost::split(strs, str, boost::is_any_of("\""));
 
@@ -118,15 +140,7 @@ namespace rukia
 	      }
 	    else
 	      {
-		// Parse first line
-		std::string str;
-		getline (*pfile_, str);
-		std::vector<std::string> strs;
-		boost::split(strs, str, boost::is_any_of("\t "));
-		
-		assert (strs.size () == 3);
-		assert (strs[0] == "digraph");
-		assert (strs[2] == "{");
+		assert_digraph(*pfile_);
 		ok_ = Parser::read(*pfile_, value_);
 	      }
 	  }
@@ -168,18 +182,10 @@ namespace rukia
 	    {
 	      std::cerr << "error: file '" << fname
 			<< "' not found!";
-	      return 0;
+	      exit(1);
 	    }
-	  // Parse first line
-	  std::string str;
-	  getline (ifs, str);
-	  std::vector<std::string> strs;
-	  boost::split(strs, str, boost::is_any_of("\t "));
-	
-	  assert (strs.size () == 3);
-	  assert (strs[0] == "digraph");
-	  assert (strs[2] == "{");
-    
+	  assert_digraph(ifs);
+
 	  size_t max = 0;
 	  // Read each edge and check if one vertex index is greater than the
 	  // current max value.
@@ -188,7 +194,7 @@ namespace rukia
 	      size_t src, dst;
 	      char c;
 	      std::string str;
-	      do { 
+	      do {
 		ifs >> src;
 		do { c = ifs.get (); } while (isspace (c));
 	      } while (c == ';');
@@ -196,6 +202,9 @@ namespace rukia
 	      c = ifs.get (); assert (c == '>');
 	      ifs >> dst;
 	      getline (ifs, str);
+	      // Get rid of last character if it is a \r.
+	      if (not str.empty() and *str.crbegin() == '\r')
+		str.pop_back();
 	      if (src > max)
 		max = src;
 	      if (dst > max)
@@ -216,7 +225,7 @@ namespace rukia
 	if (! file)
 	  {
 	    std::cerr << "error: file '" << filename
-		      << "' not found!";
+		      << "' not found!" << std::endl;
 	    exit (1);
 	  }
 	read_graphviz (file, a, dp, "id");
@@ -228,39 +237,32 @@ namespace rukia
       {
 	typedef typename boost::graph_traits<Aut>::vertex_descriptor vertex_descriptor;
 #ifdef BOOST_GRAPH_USE_OLD_CSR_INTERFACE
-	std::ifstream file (filename.c_str());
-	if (! file)
+	std::ifstream ifs (filename.c_str());
+	if (ifs.fail())
 	  {
 	    std::cerr << "error: file '" << filename
-		      << "' not found!";
+		      << "' not found!" << std::endl;
 	    exit (1);
 	  }
-	
+
 	std::string str;
 	char c;
-	getline (file, str);
-	std::vector<std::string> strs;
-	boost::split(strs, str, boost::is_any_of("\t "));
+	assert_digraph(ifs);
 
-	assert (strs.size () == 3);
-	assert (strs[0] == "digraph");
-	assert (strs[2] == "{");
-	
-// 	add_vertices (n_vertices, aut);
-	while (file.good () && file.peek () != '}')
+	while (ifs.good () && ifs.peek () != '}')
 	  {
 	    vertex_descriptor src, dst;
 	    std::string label;
-	    do { 
-	      file >> src;
-	      do { c = file.get (); } while (isspace (c));
+	    do {
+	      ifs >> src;
+	      do { c = ifs.get (); } while (isspace (c));
 	    } while (c == ';');
 	    assert (c == '-');
-	    c = file.get (); assert (c == '>');
-	    file >> dst;
-	    getline (file, str, '"');
-	    getline (file, label, '"');
-	    getline (file, str);
+	    c = ifs.get (); assert (c == '>');
+	    ifs >> dst;
+	    getline (ifs, str, '"');
+	    getline (ifs, label, '"');
+	    getline (ifs, str);
 	    if (num_vertices (aut) <= src)
 	      {
 		add_vertices (src - num_vertices (aut) + 1, aut);
