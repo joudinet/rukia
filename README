@@ -3,10 +3,11 @@
 
   A library to generate uniformly at random paths in automata.
 
-  Copyright (C) 2008, 2009, 2011, 2012, 2013 Johan Oudinet
+  Copyright (C) 2008, 2018 Johan Oudinet
 
 * Building Rukia from a fresh git clone
 * =====================================
+
 
 ** Bootstrap
 ** =========
@@ -26,7 +27,11 @@ This  step  needs   Automake,  Autoconf,  and  Libtool  (Debian/Ubuntu
 packages:   automake,  autoconf,   autotools-dev,   libtool,  possibly
 libltdl-dev.  Be  sure to  check your alternatives  regarding Autoconf
 and Automake's versions.  See  the update-alternatives(8) man page and
-use the last available versions).
+use the last available versions). It also uses M4 macros provided by
+the autoconf-archive project:
+$ apt-get install autoconf-archive
+Note, the AX_CXX_COMPILE_STDCXX_14 macro is defined in autoconf-archive
+version 2017.09.28 or above.
 
 ** Build
 ** =====
@@ -41,7 +46,7 @@ $ make
 $ make install
 
 The prerequisites for a full build are (Debian/Ubuntu packages):
-  libboost-graph-dev (>= 1.47)
+  libboost-graph-dev (>= 1.55)
   libgmp-dev
 
 If you've installed one of the required libraries in a non classical
@@ -55,7 +60,7 @@ $ ./configure --with-boost=$HOME
 *** ============================================
 
   extract boost archive then go in it and enter the two following
-  commands:  
+  commands:
   $ ./bootstrap.sh --prefix=$HOME
   $ ./b2 install
   $ sudo ldconfig $HOME/lib
@@ -82,7 +87,7 @@ here just to be able to draw paths of length <= 7. Hence, in this
 particular execution, we got 2 paths of length 3 ('abc' and 'adg') and
 1 path of length 5 ('adefg').
 
-$ cat data/example.dot 
+$ cat data/example.dot
 digraph G {
 0 -> 0 [label = "i"];
 0 -> 1 [label = "a"];
@@ -94,7 +99,7 @@ digraph G {
 4 -> 3 [label = "f"];
 }
 
-$ cat data/example.fs 
+$ cat data/example.fs
 5
 
 $ src/draw_exact_ctable data/example.dot 3 7 data/example.fs
@@ -110,5 +115,5 @@ i i i i a b c
 For issues, please report them on github:
 https://github.com/joudinet/rukia
 
--- 
+--
 Johan Oudinet <johan.oudinet+rukia@gmail.com>
